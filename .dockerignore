@@ -1,0 +1,12 @@
+node_modules
+dist
+.env.local
+.git
+Dockerfile
+docker-compose*
+README.md
+coverage
+private
+*.log
+src/**/*.spec.ts
+.vscode
