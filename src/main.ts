@@ -46,7 +46,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Sabda Nest API')
-    .setDescription('Sabda Nest API - API documentation (deploy via ci/cd)')
+    .setDescription('Sabda Nest API - API documentation (with health check)')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
