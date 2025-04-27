@@ -26,6 +26,8 @@ RUN pnpm prune --prod --ignore-scripts
 # ---- Production stage ----
 FROM node:22-alpine AS deploy
 
+RUN apk add --no-cache curl
+
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
