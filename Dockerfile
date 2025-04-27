@@ -29,8 +29,5 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY package.json ./
 
-RUN chown -R appuser:appuser /app
-USER appuser  # Jalankan aplikasi dengan user non-root
-
 EXPOSE 8000
 CMD ["node", "dist/main"]
