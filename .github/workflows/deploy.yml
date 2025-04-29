@@ -44,17 +44,21 @@ jobs:
           ssh-keyscan -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy over SSH
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            if [ "${GITHUB_REF##*/}" = "main" ]; then
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
+            BRANCH_NAME="${BRANCH_NAME}"
+
+            if [ "$BRANCH_NAME" = "main" ]; then
               cd /home/sabdahtb/projects/nest-ts
-            elif [ "${GITHUB_REF##*/}" = "staging" ]; then
+            elif [ "$BRANCH_NAME" = "staging" ]; then
               cd /home/sabdahtb/projects/nest-ts-staging
             else
-              echo "Unknown branch. Exiting."
+              echo "Unknown branch: $BRANCH_NAME. Exiting."
               exit 1
             fi
 
-            git pull origin ${GITHUB_REF##*/}
+            git pull origin $BRANCH_NAME
             docker compose up -d --build
           EOF
