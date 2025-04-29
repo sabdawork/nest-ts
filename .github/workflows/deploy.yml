@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - staging
 
 jobs:
   build_and_test:
@@ -45,7 +46,15 @@ jobs:
       - name: Deploy over SSH
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            cd /home/sabdahtb/projects/nest-ts
-            git pull origin main
+            if [ "${GITHUB_REF##*/}" = "main" ]; then
+              cd /home/sabdahtb/projects/nest-ts
+            elif [ "${GITHUB_REF##*/}" = "staging" ]; then
+              cd /home/sabdahtb/projects/nest-ts-staging
+            else
+              echo "Unknown branch. Exiting."
+              exit 1
+            fi
+
+            git pull origin ${GITHUB_REF##*/}
             docker compose up -d --build
           EOF
