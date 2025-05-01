@@ -44,8 +44,9 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true, limit: '1mb' }));
   app.use('/webhook/xero', raw({ type: 'application/json' }));
 
+  const developerMode = isDeveloperMode();
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Sabda Nest API')
+    .setTitle(`Sabda Nest API (${developerMode ? 'dev' : 'prod'})`)
     .setDescription('Sabda Nest API (stg & prod ready)')
     .setVersion('1.0')
     .addBearerAuth()
@@ -56,8 +57,6 @@ async function bootstrap() {
 
   const logger = new Logger('Bootstrap');
   await app.listen(port);
-
-  const developerMode = isDeveloperMode();
 
   logger.log(
     `🚀 App running on ${developerMode ? 'Developer Mode' : 'Production Mode'} http://localhost:${port}`,
