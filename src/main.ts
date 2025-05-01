@@ -46,7 +46,7 @@ async function bootstrap() {
 
   const developerMode = isDeveloperMode();
   const swaggerConfig = new DocumentBuilder()
-    .setTitle(`Sabda Nest API (${developerMode ? 'dev' : 'prod'})`)
+    .setTitle(`Sabda Nest API${developerMode ? ' (DEVELOPER MODE)' : ''}`)
     .setDescription('Sabda Nest API (stg & prod ready)')
     .setVersion('1.0')
     .addBearerAuth()
