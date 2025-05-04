@@ -46,14 +46,20 @@ async function bootstrap() {
 
   const developerMode = isDeveloperMode();
   const swaggerConfig = new DocumentBuilder()
-    .setTitle(`Sabda Nest API${developerMode ? ' (DEVELOPER MODE)' : '(SWARM MODE)'}`)
+    .setTitle(`Sabda Nest API ${developerMode ? '(DEVELOPER)' : '(SWARM)'}`)
     .setDescription('Sabda Nest API (stg & prod ready)')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      docExpansion: 'none',
+      cache: false,
+    },
+    customSiteTitle: 'Sabda Nest API Docs',
+  });
 
   const logger = new Logger('Bootstrap');
   await app.listen(port);
