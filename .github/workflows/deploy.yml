@@ -51,14 +51,18 @@ jobs:
             BRANCH_NAME="${BRANCH_NAME}"
 
             if [ "$BRANCH_NAME" = "main" ]; then
+              # Use Swarm for main branch
               cd /home/sabdahtb/projects/nest-ts
+              git pull origin main
+              docker build -t sabdahtb/nestjs-api:latest .
+              docker stack deploy -c stack.yml nest-ts  # Deploy with Docker Swarm
             elif [ "$BRANCH_NAME" = "staging" ]; then
+              # Use Docker Compose for staging branch
               cd /home/sabdahtb/projects/nest-ts-staging
+              git pull origin staging
+              docker compose up -d --build  # Deploy with Docker Compose
             else
               echo "Unknown branch: $BRANCH_NAME. Exiting."
               exit 1
             fi
-
-            git pull origin $BRANCH_NAME
-            docker compose up -d --build
           EOF
