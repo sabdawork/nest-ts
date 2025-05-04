@@ -56,6 +56,10 @@ jobs:
               git pull origin main
               docker build -t sabdahtb/nestjs-api:latest .
               docker stack deploy -c stack.yml nest-ts  # Deploy with Docker Swarm
+              docker service update --force --image sabdahtb/nestjs-api:latest nest-ts_nestjs-api
+              docker container prune -f
+              docker image prune -f
+              docker volume prune -f
             elif [ "$BRANCH_NAME" = "staging" ]; then
               # Use Docker Compose for staging branch
               cd /home/sabdahtb/projects/nest-ts-staging
